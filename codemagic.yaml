@@ -1,0 +1,21 @@
+workflows:
+  android-debug:
+    name: Build Android APK
+    max_build_duration: 60
+    environment:
+      android-sdk:
+        version: 34.0.0
+        build-tools: 34.0.0
+    scripts:
+      - name: Set Android SDK path
+        script: |
+          echo "ANDROID_SDK_ROOT: $CM_BUILD_DIR/android-sdk" >> $CM_ENV
+      - name: Build debug APK
+        script: |
+          export ANDROID_HOME="/Users/builder/Library/Android/sdk"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+          cd $CM_BUILD_DIR
+          chmod +x ./gradlew
+          ./gradlew assembleDebug
+    artifacts:
+      - app/build/outputs/apk/debug/*.apk
